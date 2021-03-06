@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PdfView">
+        <attr name="quality" format="integer">
+            <enum name="low" value="1"/>
+            <enum name="medium" value="2"/>
+            <enum name="high" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zjy.pdfview">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <activity android:name="com.zjy.pdfview.PdfRendererActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTransparentAppCompatTheme"/>
+        <service android:name="com.zjy.pdfview.download.DownloadService" />
+    </application>
+</manifest>
