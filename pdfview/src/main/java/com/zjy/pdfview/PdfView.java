@@ -27,6 +27,7 @@ import com.zjy.pdfview.adapter.PdfPageAdapter;
 import com.zjy.pdfview.download.DownloadResultBroadcast;
 import com.zjy.pdfview.download.DownloadService;
 import com.zjy.pdfview.download.IDownloadCallback;
+import com.zjy.pdfview.utils.FileUtils;
 import com.zjy.pdfview.utils.PdfLog;
 import com.zjy.pdfview.utils.layoutmanager.PageLayoutManager;
 import com.zjy.pdfview.utils.layoutmanager.PagerChangedListener;
@@ -209,10 +210,15 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
         contentRv.setVisibility(GONE);
         loadingLayout.showLoading();
         if (!TextUtils.isEmpty(url)) {
-            pdfUrl = url;
-            serviceIntent = new Intent(getContext(), DownloadService.class);
-            serviceIntent.putExtra(DOWNLOAD_URL_KEY, url);
-            getContext().startService(serviceIntent);
+            if (url.startsWith("http")) {
+                pdfUrl = url;
+                serviceIntent = new Intent(getContext(), DownloadService.class);
+                serviceIntent.putExtra(DOWNLOAD_URL_KEY, url);
+                getContext().startService(serviceIntent);
+            } else {
+                pdfLocalPath = url;
+                openPdf();
+            }
         }
     }
 
@@ -246,8 +252,14 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
 
     private ParcelFileDescriptor getFileDescriptor() {
         try {
-            parcelFileDescriptor = ParcelFileDescriptor.open(new File(pdfLocalPath), ParcelFileDescriptor.MODE_READ_ONLY);
-        } catch (FileNotFoundException e) {
+            File file;
+            if (pdfLocalPath.contains("asset")) {
+                file = FileUtils.writeAssetsToFile(getContext(), "test.pdf");
+            } else {
+                file = new File(pdfLocalPath);
+            }
+            parcelFileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return parcelFileDescriptor;
