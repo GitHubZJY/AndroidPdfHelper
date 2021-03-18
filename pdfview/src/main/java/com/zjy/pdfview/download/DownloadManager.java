@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.zjy.pdfview.utils.FileUtils;
 import com.zjy.pdfview.utils.PdfLog;
 
 import java.io.File;
@@ -14,9 +15,6 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okio.BufferedSink;
-import okio.Okio;
-import okio.Sink;
 
 /**
  * Date: 2021/1/26
@@ -49,35 +47,10 @@ public class DownloadManager {
             }
 
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Sink sink = null;
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 String resultPath = "";
-                BufferedSink bufferedSink = null;
                 try {
-                    String folderPath = context.getFilesDir().getAbsolutePath() + "/pdf/";
-                    File folder = new File(folderPath);
-                    if (!folder.exists()) {
-                       folder.mkdir();
-                    }
-                    File[] cacheList = folder.listFiles();
-                    if (cacheList != null && cacheList.length >= 10) {
-                        for (int i = 0; i < cacheList.length; i++) {
-                            File childFile = cacheList[i];
-                            childFile.delete();
-                        }
-                    }
-                    File dest = new File(folderPath, url.substring(url.lastIndexOf("/") + 1));
-                    if (dest.exists()) {
-                        resultPath = dest.getAbsolutePath();
-                        PdfLog.logError("download cache exist");
-                        return;
-                    }
-                    sink = Okio.sink(dest);
-                    bufferedSink = Okio.buffer(sink);
-                    bufferedSink.writeAll(response.body().source());
-
-                    bufferedSink.close();
-                    PdfLog.logInfo("download success");
+                    File dest = FileUtils.writeNetToFile(context, url, response);
                     PdfLog.logInfo("download totalTime=" + (System.currentTimeMillis() - startTime));
                     resultPath = dest.getAbsolutePath();
                     if (mCallback != null) {
@@ -90,9 +63,6 @@ public class DownloadManager {
                         mCallback.downloadFail();
                     }
                 } finally {
-                    if (bufferedSink != null) {
-                        bufferedSink.close();
-                    }
                     if (mCallback != null) {
                         mCallback.downloadComplete(resultPath);
                     }

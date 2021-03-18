@@ -254,7 +254,7 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
         try {
             File file;
             if (pdfLocalPath.contains("asset")) {
-                file = FileUtils.writeAssetsToFile(getContext(), "test.pdf");
+                file = FileUtils.writeAssetsToFile(getContext(), pdfLocalPath);
             } else {
                 file = new File(pdfLocalPath);
             }
