@@ -7,52 +7,12 @@
     android:layout_height="match_parent"
     android:background="#FFFFFE">
 
-    <LinearLayout
+    <com.zjy.pdfview.widget.PDFControllerBar
         android:id="@+id/button_group"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:elevation="8dp"
-        tools:targetApi="lollipop">
-        <Button
-            android:id="@+id/button_open"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:background="@drawable/bg_operate_btn"
-            android:textSize="14sp"
-            android:text="Open"
-            android:visibility="gone"
-            />
-        <Button
-            android:id="@+id/button_previous"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:background="@drawable/bg_operate_btn"
-            android:textSize="14sp"
-            android:text="上一页"
-            />
-        <TextView
-            android:id="@+id/page_index_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:text="1/1"/>
-        <Button
-            android:id="@+id/button_next"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:background="@drawable/bg_operate_btn"
-            android:textSize="14sp"
-            android:text="下一页"
-            />
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <com.zjy.pdfview.widget.PdfLoadingLayout
         android:id="@+id/loading_layout"

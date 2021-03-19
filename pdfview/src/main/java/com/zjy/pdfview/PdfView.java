@@ -31,6 +31,8 @@ import com.zjy.pdfview.utils.FileUtils;
 import com.zjy.pdfview.utils.PdfLog;
 import com.zjy.pdfview.utils.layoutmanager.PageLayoutManager;
 import com.zjy.pdfview.utils.layoutmanager.PagerChangedListener;
+import com.zjy.pdfview.widget.IPDFController;
+import com.zjy.pdfview.widget.PDFControllerBar;
 import com.zjy.pdfview.widget.PdfLoadingLayout;
 import com.zjy.pdfview.widget.ScrollSlider;
 
@@ -51,11 +53,8 @@ import static com.zjy.pdfview.download.DownloadService.DOWNLOAD_URL_KEY;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class PdfView extends FrameLayout implements IDownloadCallback {
 
-    private Button openButton;
-    private Button previousButton;
-    private Button nextButton;
+    private IPDFController controllerBar;
     private RecyclerView contentRv;
-    private TextView pageIndexTv;
     private PdfLoadingLayout loadingLayout;
     private ScrollSlider scrollSlider;
 
@@ -118,12 +117,9 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
         registerResultBroadcast();
 
         LayoutInflater.from(getContext()).inflate(R.layout.layout_pdf_view, this);
-        openButton = findViewById(R.id.button_open);
-        pageIndexTv = findViewById(R.id.page_index_tv);
+        controllerBar = findViewById(R.id.button_group);
         loadingLayout = findViewById(R.id.loading_layout);
         contentRv = findViewById(R.id.content_rv);
-        previousButton = findViewById(R.id.button_previous);
-        nextButton = findViewById(R.id.button_next);
         scrollSlider = findViewById(R.id.scroll_slider);
 
         pageLayoutManager = new PageLayoutManager(getContext(), PageLayoutManager.VERTICAL);
@@ -158,36 +154,25 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
         pageAdapter = new PdfPageAdapter(getContext(), pageList);
         contentRv.setAdapter(pageAdapter);
 
-        openButton.setOnClickListener(new View.OnClickListener() {
-
+        controllerBar.setOperateListener(new IPDFController.OperateListener() {
             @Override
-            public void onClick(View v) {
-                openPdf();
-            }
-        });
-
-        nextButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                currentIndex = pageLayoutManager.getCurrentPosition();
-                if(currentIndex + 1 < pageLayoutManager.getItemCount()) {
-                    currentIndex++;
-                    scrollToPosition();
-                }
-            }
-        });
-
-        previousButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
+            public void clickPrevious() {
                 currentIndex = pageLayoutManager.getCurrentPosition();
                 if (currentIndex - 1 >= 0) {
                     currentIndex--;
                     scrollToPosition();
                 }
             }
+
+            @Override
+            public void clickNext() {
+                currentIndex = pageLayoutManager.getCurrentPosition();
+                if(currentIndex + 1 < pageLayoutManager.getItemCount()) {
+                    currentIndex++;
+                    scrollToPosition();
+                }
+            }
+
         });
 
         scrollSlider.setScrollSlideListener(new ScrollSlider.ScrollSlideListener() {
@@ -199,7 +184,7 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
                     scrollSlider.setTranslationY(scrollY - scrollY % pageItemHeight);
                     currentIndex = scrollIndex;
                     pageLayoutManager.scrollToPosition(currentIndex);
-                    pageIndexTv.setText(generatePageIndexText());
+                    controllerBar.setPageIndexText(generatePageIndexText());
                 }
                 return true;
             }
@@ -222,9 +207,13 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
         }
     }
 
+    public void setPDFController(IPDFController controller) {
+        this.controllerBar = controller;
+    }
+
     private void scrollToPosition() {
         pageLayoutManager.scrollToPosition(currentIndex);
-        pageIndexTv.setText(generatePageIndexText());
+        controllerBar.setPageIndexText(generatePageIndexText());
     }
 
     private DownloadResultBroadcast downloadReceiver;
@@ -316,7 +305,7 @@ public class PdfView extends FrameLayout implements IDownloadCallback {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
             if (result) {
-                pageIndexTv.setText(generatePageIndexText());
+                controllerBar.setPageIndexText(generatePageIndexText());
                 pageAdapter.notifyDataSetChanged();
                 contentRv.setVisibility(VISIBLE);
                 loadingLayout.showContent();
