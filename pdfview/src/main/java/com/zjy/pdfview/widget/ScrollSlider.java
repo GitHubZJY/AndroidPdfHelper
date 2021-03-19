@@ -50,11 +50,14 @@ public class ScrollSlider extends LinearLayout {
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-        for(int i=0; i<getChildCount(); i++) {
-            getChildAt(i).getLayoutParams().width = getMeasuredWidth()/2;
-            getChildAt(i).getLayoutParams().height = getMeasuredWidth()/2;
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        for (int i=0; i<getChildCount(); i++) {
+            View childView = getChildAt(i);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)childView.getLayoutParams();
+            params.width = w/2;
+            params.height = h/2;
+            childView.setLayoutParams(params);
         }
     }
 

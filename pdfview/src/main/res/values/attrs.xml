@@ -2,10 +2,15 @@
 <resources>
 
     <declare-styleable name="PdfView">
+        <!--预览页面清晰度质量-->
         <attr name="quality" format="integer">
-            <enum name="low" value="1"/>
-            <enum name="medium" value="2"/>
-            <enum name="high" value="3" />
+            <!--低清晰度-->
+            <enum name="low" value="5"/>
+            <!--普通清晰度-->
+            <enum name="medium" value="3"/>
+            <!--高清-->
+            <enum name="high" value="1" />
         </attr>
     </declare-styleable>
+
 </resources>
