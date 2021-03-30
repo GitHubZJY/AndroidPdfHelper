@@ -2,17 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pdf_root_view"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFE">
 
-    <com.zjy.pdfview.widget.PDFControllerBar
+    <FrameLayout
         android:id="@+id/button_group"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent">
+        <com.zjy.pdfview.widget.PDFControllerBar
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            />
+    </FrameLayout>
+
+
 
     <com.zjy.pdfview.widget.PdfLoadingLayout
         android:id="@+id/loading_layout"

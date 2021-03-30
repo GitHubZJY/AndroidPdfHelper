@@ -7,7 +7,7 @@ package com.zjy.pdfview.widget;
  */
 public interface IPDFController {
 
-    void setOperateListener(OperateListener listener);
+    void addOperateListener(OperateListener listener);
 
     void setPageIndexText(String text);
 
