@@ -7,7 +7,8 @@ A PDF preview component based on Android pdfRenderer, which supports paging swit
 2. 支持PDF文件的上下页切换 <br/>
 3. 支持PDF单页的放大缩小查看 <br/>
 4. 支持设置文件预览清晰度 <br/>
-5. 支持AndroidX <br/>
+5. 支持自定义控制栏样式 <br/>
+6. 支持AndroidX <br/>
 
 ## 效果预览
 ![](https://github.com/GitHubZJY/AndroidPdfHelper/blob/master/image/pdf_preview_1.png)
@@ -68,7 +69,7 @@ PdfPreviewUtils.previewPdf(context, "file:///android_asset/test.pdf");
 
 &nbsp;
 ### 3.设置预览清晰度.
-```java
+```xml
 <com.zjy.pdfview.PdfView
     android:id="@+id/pdf_view"
     android:layout_width="match_parent"
@@ -78,9 +79,9 @@ PdfPreviewUtils.previewPdf(context, "file:///android_asset/test.pdf");
 </com.zjy.pdfview.PdfView>
 ```
 通过设置 `quality` 属性即可，目前一共有低、中、高三种清晰度，如下：
->高清晰度：high
-中等清晰度：medium
-低清晰度：low
+>高清晰度：**high** <br/>
+中等清晰度：**medium** <br/>
+低清晰度：**low**
 
 &nbsp;
 ## 其他
