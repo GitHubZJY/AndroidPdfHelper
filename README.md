@@ -54,6 +54,21 @@ pdfView.loadPdf("http://.....xx.pdf");
 ```java
 pdfView.loadPdf("file:///android_asset/test.pdf");
 ```
+&nbsp;
+自定义预览操作条:
+首先继承于 `AbsControllerBar`, 重写 `getView` 方法返回自定义的视图
+```
+public class CustomControllerBar extends AbsControllerBar {
+    public View getView() {
+        //...
+    }
+}
+```
+通过 `setPDFController` 设置自定义的Controller即可
+```java
+CustomControllerBar controllerBar = new CustomControllerBar(this);
+pdfView.setPDFController(controllerBar);
+```
 
 ### 2.以页面方式调起
 以页面的形式，自带了默认的顶部标题栏，适配Android 5.0以下，会自动下载并调用浏览器打开
