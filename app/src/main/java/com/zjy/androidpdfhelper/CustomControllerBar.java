@@ -1,4 +1,7 @@
-package com.zjy.pdfview.widget;
+package com.zjy.androidpdfhelper;
+
+import static android.view.Gravity.CENTER;
+import static android.widget.LinearLayout.HORIZONTAL;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,29 +18,27 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.zjy.pdfview.R;
-
-import static android.view.Gravity.CENTER;
-import static android.widget.LinearLayout.HORIZONTAL;
+import com.zjy.pdfview.widget.AbsControllerBar;
 
 /**
- * Date: 2021/3/19
+ * Date: 2022/2/10
  * Author: Yang
- * Describe: PDF控制栏视图
+ * Describe: 自定义PDF控制栏视图
  */
-public class PDFControllerBar extends AbsControllerBar implements View.OnClickListener {
+public class CustomControllerBar extends AbsControllerBar implements View.OnClickListener {
 
     private Button previousBtn, nextBtn;
     private TextView pageIndexTv;
 
-    public PDFControllerBar(Context context) {
+    public CustomControllerBar(Context context) {
         this(context, null);
     }
 
-    public PDFControllerBar(Context context, @Nullable AttributeSet attrs) {
+    public CustomControllerBar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PDFControllerBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CustomControllerBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -54,7 +55,7 @@ public class PDFControllerBar extends AbsControllerBar implements View.OnClickLi
         previousBtn = new Button(getContext());
         previousBtn.setBackgroundResource(R.drawable.bg_operate_btn);
         previousBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        previousBtn.setText("上一页");
+        previousBtn.setText("Previous");
         rootView.addView(previousBtn, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dip2px(getContext(), 36)));
 
         pageIndexTv = new TextView(getContext());
@@ -67,7 +68,7 @@ public class PDFControllerBar extends AbsControllerBar implements View.OnClickLi
         nextBtn = new Button(getContext());
         nextBtn.setBackgroundResource(R.drawable.bg_operate_btn);
         nextBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        nextBtn.setText("下一页");
+        nextBtn.setText("Next");
         rootView.addView(nextBtn, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dip2px(getContext(), 36)));
 
         previousBtn.setOnClickListener(this);

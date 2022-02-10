@@ -36,6 +36,15 @@ public abstract class AbsControllerBar extends FrameLayout implements IPDFContro
 
     protected abstract View getView();
 
+    public void setPreviousText(String previousText) {
+
+    }
+
+    public void setNextText(String nextText) {
+
+    }
+
+
     private void initView(Context context) {
         View view = getView();
         if (view == null) {

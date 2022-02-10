@@ -274,6 +274,24 @@ public class PdfView extends FrameLayout implements IDownloadCallback, IPDFContr
         }
     }
 
+    public void setPreviousText(String previousText) {
+        if (controllerContainer != null && previousText != null) {
+            AbsControllerBar controllerBar = (AbsControllerBar) controllerContainer.getChildAt(0);
+            if (controllerBar != null) {
+                controllerBar.setPreviousText(previousText);
+            }
+        }
+    }
+
+    public void setNextText(String nextText) {
+        if (controllerContainer != null && nextText != null) {
+            AbsControllerBar controllerBar = (AbsControllerBar) controllerContainer.getChildAt(0);
+            if (controllerBar != null) {
+                controllerBar.setNextText(nextText);
+            }
+        }
+    }
+
     @Override
     public void downloadSuccess(String path) {
 

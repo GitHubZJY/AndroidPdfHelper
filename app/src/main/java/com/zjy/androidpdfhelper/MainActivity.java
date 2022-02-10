@@ -14,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //CustomPdfViewActivity.startPreview(this, "file:///android_asset/test.pdf");
+
         PdfPreviewUtils.previewPdf(this, "file:///android_asset/test.pdf");
     }
 
