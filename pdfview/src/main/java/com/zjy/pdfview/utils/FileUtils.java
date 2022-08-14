@@ -18,16 +18,19 @@ public class FileUtils {
         String fileName = assetPath.substring(assetPath.lastIndexOf("/") + 1);
         File resultFile = checkCacheSize(context, assetPath);
         if (!resultFile.exists()) {
-            resultFile.createNewFile();
+            boolean createResult = resultFile.createNewFile();
+            if (!createResult) {
+                return null;
+            }
         }
         InputStream is = context.getAssets().open(fileName);
         FileOutputStream fos = null;
         try {
             byte[] data = new byte[2048];
-            int nbread = 0;
+            int readBuffer;
             fos = new FileOutputStream(resultFile);
-            while ((nbread = is.read(data)) > -1) {
-                fos.write(data, 0, nbread);
+            while ((readBuffer = is.read(data)) > -1) {
+                fos.write(data, 0, readBuffer);
             }
         } catch (Exception ex) {
             PdfLog.logError("Exception: " + ex);
@@ -75,8 +78,7 @@ public class FileUtils {
         }
         File[] cacheList = folder.listFiles();
         if (cacheList != null && cacheList.length >= 10) {
-            for (int i = 0; i < cacheList.length; i++) {
-                File childFile = cacheList[i];
+            for (File childFile : cacheList) {
                 childFile.delete();
             }
         }

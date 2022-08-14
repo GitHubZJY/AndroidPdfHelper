@@ -26,8 +26,8 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class PdfPageAdapter extends RecyclerView.Adapter<PdfPageAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Bitmap> pageList;
+    final private Context context;
+    final private List<Bitmap> pageList;
 
     public PdfPageAdapter(Context context, List<Bitmap> pageList) {
         this.context = context;

@@ -1,5 +1,10 @@
 package com.zjy.pdfview;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.zjy.pdfview.constants.Constants.DOWNLOAD_ACTION;
+import static com.zjy.pdfview.download.DownloadService.DOWNLOAD_URL_KEY;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,15 +17,12 @@ import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zjy.pdfview.adapter.PdfPageAdapter;
@@ -40,11 +42,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static com.zjy.pdfview.constants.Constants.DOWNLOAD_ACTION;
-import static com.zjy.pdfview.download.DownloadService.DOWNLOAD_URL_KEY;
 
 /**
  * Date: 2021/1/27
@@ -144,12 +141,9 @@ public class PdfView extends FrameLayout implements IDownloadCallback, IPDFContr
         });
         contentRv.setLayoutManager(pageLayoutManager);
 
-        loadingLayout.setLoadLayoutListener(new PdfLoadingLayout.LoadLayoutListener() {
-            @Override
-            public void clickRetry() {
-                if (!TextUtils.isEmpty(pdfUrl)) {
-                    loadPdf(pdfUrl);
-                }
+        loadingLayout.setLoadLayoutListener(() -> {
+            if (!TextUtils.isEmpty(pdfUrl)) {
+                loadPdf(pdfUrl);
             }
         });
 
@@ -159,19 +153,17 @@ public class PdfView extends FrameLayout implements IDownloadCallback, IPDFContr
 
         getOperateView().addOperateListener(this);
 
-        scrollSlider.setScrollSlideListener(new ScrollSlider.ScrollSlideListener() {
-            @Override
-            public boolean scrolling(int scrollY) {
-                int pageItemHeight = contentRv.getHeight() / pageCount;
-                int scrollIndex = (int) scrollY / pageItemHeight;
-                if(scrollIndex >= 0 && scrollIndex < pageLayoutManager.getItemCount()) {
-                    scrollSlider.setTranslationY(scrollY - scrollY % pageItemHeight);
-                    currentIndex = scrollIndex;
-                    pageLayoutManager.scrollToPosition(currentIndex);
-                    getOperateView().setPageIndexText(generatePageIndexText());
-                }
-                return true;
+        scrollSlider.setScrollSlideListener(scrollY -> {
+            if (pageCount == 0) return true;
+            int pageItemHeight = contentRv.getHeight() / pageCount;
+            int scrollIndex = scrollY / pageItemHeight;
+            if(scrollIndex >= 0 && scrollIndex < pageLayoutManager.getItemCount()) {
+                scrollSlider.setTranslationY(scrollY - scrollY % pageItemHeight);
+                currentIndex = scrollIndex;
+                pageLayoutManager.scrollToPosition(currentIndex);
+                getOperateView().setPageIndexText(generatePageIndexText());
             }
+            return true;
         });
     }
 
@@ -342,6 +334,8 @@ public class PdfView extends FrameLayout implements IDownloadCallback, IPDFContr
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
+            scrollSlider.setVisibility(pageCount == 0 ? GONE : VISIBLE);
+
             if (result) {
                 getOperateView().setPageIndexText(generatePageIndexText());
                 pageAdapter.notifyDataSetChanged();
